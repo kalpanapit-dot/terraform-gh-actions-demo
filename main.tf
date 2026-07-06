@@ -26,9 +26,9 @@ resource "aws_s3_bucket" "demo_bucket" {
   bucket = var.bucket_name
 
   tags = {
-    Environment = "learning"
-    ManagedBy   = "github-actions"
-  }
+  Environment = "learning"
+  ManagedBy   = "github-actions"
+  Project     = "gh-actions-demo"
 }
 
 output "bucket_arn" {
