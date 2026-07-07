@@ -25,10 +25,10 @@ variable "bucket_name" {
 resource "aws_s3_bucket" "demo_bucket" {
   bucket = var.bucket_name
 
-  tags = {
+ tags = {
   Environment = "learning"
   ManagedBy   = "github-actions"
-  Project     = "gh-actions-demo"
+  Stage       = "approval-test"
 }
 }
 output "bucket_arn" {
