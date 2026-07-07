@@ -28,7 +28,7 @@ resource "aws_s3_bucket" "demo_bucket" {
  tags = {
   Environment = "learning"
   ManagedBy   = "github-actions"
-  Stage       = "debug-creds-test"
+  Stage       = "debug-run-2"
 }
 }
 output "bucket_arn" {
