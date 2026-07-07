@@ -1,0 +1,56 @@
+name: Reusable Terraform Workflow
+
+on:
+  workflow_call:
+    inputs:
+      tf_command:
+        description: 'Terraform command to run (plan, apply, or destroy)'
+        required: true
+        type: string
+      environment_name:
+        description: 'GitHub environment to use (optional)'
+        required: false
+        type: string
+        default: ''
+    secrets:
+      aws_access_key_id:
+        required: true
+      aws_secret_access_key:
+        required: true
+    outputs:
+      result:
+        description: 'Result of the terraform command'
+        value: ${{ jobs.run_terraform.outputs.status }}
+
+jobs:
+  run_terraform:
+    name: Run Terraform ${{ inputs.tf_command }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment_name }}
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+      TF_VAR_bucket_name: ${{ vars.TF_VAR_BUCKET_NAME }}
+
+    outputs:
+      status: ${{ steps.set_status.outputs.status }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.0
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Run Terraform Command
+        run: terraform ${{ inputs.tf_command }} -auto-approve
+
+      - name: Set status output
+        id: set_status
+        run: echo "status=success" >> "$GITHUB_OUTPUT"
