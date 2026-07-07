@@ -49,7 +49,12 @@ jobs:
         run: terraform init
 
       - name: Run Terraform Command
-        run: terraform ${{ inputs.tf_command }} -auto-approve
+        run: |
+          if [ "${{ inputs.tf_command }}" = "plan" ]; then
+            terraform plan
+          else
+            terraform ${{ inputs.tf_command }} -auto-approve
+          fi
 
       - name: Set status output
         id: set_status
