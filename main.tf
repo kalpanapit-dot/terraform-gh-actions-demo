@@ -28,7 +28,7 @@ resource "aws_s3_bucket" "demo_bucket" {
  tags = {
   Environment = "learning"
   ManagedBy   = "github-actions"
-  Stage       = "reusable-workflow-test"
+  Stage       = "reusable-fix-test"
 }
 }
 output "bucket_arn" {
